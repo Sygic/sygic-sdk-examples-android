@@ -16,6 +16,6 @@ Each folder contains an Android Studio project. Projects are independent from ea
 
 1. Clone this repository
 2. Get your [API key](https://www.sygic.com/enterprise/get-api-key)
-3. Open project/folder which you would like to try
+3. Open project/folder which you would like to try in Android Studio
 4. Put API key into local.properties of this project as sygic.sdk.client.id="your api key"
 5. Run
