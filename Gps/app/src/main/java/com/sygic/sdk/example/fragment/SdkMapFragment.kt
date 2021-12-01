@@ -32,6 +32,9 @@ class SdkMapFragment : MapFragment() {
         viewModel.gpsStateDrawable.observe(viewLifecycleOwner, {
             binding.fabFollowGps.setImageResource(it)
         })
+        viewModel.cameraStateDrawable.observe(viewLifecycleOwner, {
+            binding.fabCameraMode.setImageResource(it)
+        })
         binding.fabFollowGps.setOnClickListener { viewModel.followGps() }
         binding.fabCameraMode.setOnClickListener { viewModel.toggle2D3D() }
         binding.fabNorthUp.setOnClickListener { viewModel.northUp() }

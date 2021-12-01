@@ -21,6 +21,9 @@ class SdkMapFragmentViewModel : ViewModel() {
     private val gpsStateDrawableMutable = MutableLiveData<Int>()
     val gpsStateDrawable: LiveData<Int> = gpsStateDrawableMutable
 
+    private val cameraStateDrawableMutable = MutableLiveData<Int>()
+    val cameraStateDrawable: LiveData<Int> = cameraStateDrawableMutable
+
     init {
         initCameraModeListener()
         followGps()
@@ -47,6 +50,7 @@ class SdkMapFragmentViewModel : ViewModel() {
             with(cameraDataModel) {
                 movementMode = Camera.MovementMode.FollowGpsPositionWithAutozoom
                 rotationMode = Camera.RotationMode.Vehicle
+                cameraStateDrawableMutable.postValue(R.drawable.ic_2d)
                 setTilt(60F, CameraAnimation)
                 setZoomLevel(14F, CameraAnimation)
                 position = positionManager.lastKnownPosition().takeIf { it.isValid() }?.coordinates ?: positionManager.position().coordinates
@@ -70,8 +74,10 @@ class SdkMapFragmentViewModel : ViewModel() {
 
     fun toggle2D3D() {
         if (cameraDataModel.tilt == 0F) {
+            cameraStateDrawableMutable.postValue(R.drawable.ic_2d)
             cameraDataModel.setTilt(60F, CameraAnimation)
         } else {
+            cameraStateDrawableMutable.postValue(R.drawable.ic_3d)
             cameraDataModel.setTilt(0F, CameraAnimation)
         }
     }
