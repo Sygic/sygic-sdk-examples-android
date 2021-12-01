@@ -4,7 +4,7 @@ Add navigation features to your app with SygicMaps framework. Examples are provi
 
 ## Structure
 
-Each folder contains an Android Studio project. Projects are independent from each other however they share the same android package, so it is not possible to install more than one on the same device unless you change android package.
+Each folder contains an Android Studio project. Projects are independent from each other however they share the same android package, so it is not possible to install more than one on the same device unless you change android package. Android Studio 4.2+ is required to open all sample projects.
 
 1. SygicStart - initialization of Sygic SDK and showing the map on the screen
 2. Gps - enabling GPS listening for Sygic SDK and showing some basics camera controls
