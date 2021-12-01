@@ -7,9 +7,7 @@ import com.sygic.sdk.position.GeoPosition
 import com.sygic.sdk.position.PositionManager
 import com.sygic.sdk.position.PositionManagerProvider
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -30,7 +28,7 @@ class SdkPositionManager {
         }
     }
 
-    fun positions(): Flow<GeoPosition?> = callbackFlow {
+    fun positions(): Flow<GeoPosition> = callbackFlow {
         val positionManager = get()
         val listener = object : PositionManager.PositionChangeListener {
             override fun onCourseChanged(geoCourse: GeoCourse) {

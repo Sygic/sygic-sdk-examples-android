@@ -30,7 +30,7 @@ class SdkPositionManager {
         }
     }
 
-    fun positions(): Flow<GeoPosition?> = callbackFlow {
+    fun positions(): Flow<GeoPosition> = callbackFlow {
         val positionManager = get()
         val listener = object : PositionManager.PositionChangeListener {
             override fun onCourseChanged(geoCourse: GeoCourse) {

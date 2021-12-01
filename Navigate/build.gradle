@@ -3,9 +3,9 @@ buildscript {
     ext {
         sygic_sdk_version = '20.0.0'
         kotlin_version = "1.5.31"
-        compile_sdk_version = 31
+        compile_sdk_version = 30
         target_sdk_version = 30
-        build_tools_version = "31.0.0"
+        build_tools_version = "30.0.3"
     }
 
     repositories {
@@ -23,7 +23,7 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url "https://repository.sygic.com/repository/maven-public/" }
+        maven { url "https://public.repo.sygic.com/repository/maven-sygic-releases/" }
         google()
         mavenCentral()
     }
