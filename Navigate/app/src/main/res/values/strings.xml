@@ -3,4 +3,9 @@
 
     <string name="remaining_distance">Distance</string>
     <string name="remaining_time">Time</string>
+
+    <!-- Foreground service -->
+    <string name="sdk_foreground_service_channel_name">Sygic Example</string>
+    <string name="sdk_foreground_service_content_text">Bringing life to maps</string>
+    <string name="sdk_foreground_service_title">Running on background</string>
 </resources>
