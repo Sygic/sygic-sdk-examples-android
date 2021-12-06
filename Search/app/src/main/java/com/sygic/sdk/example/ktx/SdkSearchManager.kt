@@ -4,7 +4,6 @@ import com.sygic.sdk.context.CoreInitCallback
 import com.sygic.sdk.context.CoreInitException
 import com.sygic.sdk.search.SearchManager
 import com.sygic.sdk.search.SearchManagerProvider
-import com.sygic.sdk.search.Session
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -24,6 +23,6 @@ class SdkSearchManager {
         }
     }
 
-    suspend fun closeSession(session: Session) = get().closeSession(session)
-    suspend fun newOnlineSession(): Session = get().newOnlineSession()
+    suspend fun closeSession(session: SdkSearchSession) = get().closeSession(session.session)
+    suspend fun newOnlineSession(): SdkSearchSession = SdkSearchSession(get().newOnlineSession())
 }

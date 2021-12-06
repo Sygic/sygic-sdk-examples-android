@@ -6,12 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sygic.sdk.example.ktx.SdkPositionManager
 import com.sygic.sdk.example.ktx.SdkSearchManager
+import com.sygic.sdk.example.ktx.SdkSearchSession
 import com.sygic.sdk.map.Camera
 import com.sygic.sdk.map.`object`.MapMarker
 import com.sygic.sdk.map.data.SimpleCameraDataModel
 import com.sygic.sdk.map.data.SimpleMapDataModel
 import com.sygic.sdk.position.GeoCoordinates
-import com.sygic.sdk.search.*
+import com.sygic.sdk.search.AutocompleteResult
+import com.sygic.sdk.search.GeocodeLocationRequest
+import com.sygic.sdk.search.GeocodingResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -24,7 +27,7 @@ class SdkMapFragmentViewModel : ViewModel() {
 
     private var mapMarker: MapMarker? = null
     private var searchJob: Job? = null
-    private var searchSession: Session? = null
+    private var searchSession: SdkSearchSession? = null
 
     private val searchResultsMutable = MutableLiveData<List<AutocompleteResult>>()
     val searchResults: LiveData<List<AutocompleteResult>> = searchResultsMutable
@@ -64,26 +67,16 @@ class SdkMapFragmentViewModel : ViewModel() {
             searchSession?.let {
                 searchSession = null
                 val geocodeLocationRequest = GeocodeLocationRequest(result.locationId)
-                val geocodeListener = object : GeocodingResultListener {
-                    override fun onGeocodingResult(geocodingResult: GeocodingResult) {
-                        viewModelScope.launch {
-                            clearMapResultMarker()
-                            mapMarker = MapMarker.at(geocodingResult.location).build().apply {
-                                mapDataModel.addMapObject(this)
-                            }
-                            setCamera(geocodingResult.location)
-                            mapResultMutable.postValue(geocodingResult)
-                            searchManager.closeSession(it)
-                        }
+                val geocodingResult = it.geocode(geocodeLocationRequest)
+                searchManager.closeSession(it)
+                geocodingResult?.let {
+                    clearMapResultMarker()
+                    mapMarker = MapMarker.at(geocodingResult.location).build().apply {
+                        mapDataModel.addMapObject(this)
                     }
-
-                    override fun onGeocodingResultError(status: ResultStatus) {
-                        viewModelScope.launch {
-                            searchManager.closeSession(it)
-                        }
-                    }
+                    setCamera(geocodingResult.location)
+                    mapResultMutable.postValue(geocodingResult)
                 }
-                it.geocode(geocodeLocationRequest, geocodeListener)
             }
         }
     }
@@ -102,26 +95,12 @@ class SdkMapFragmentViewModel : ViewModel() {
             }
 
             searchJob = launch {
-                search(s.toString())
+                val searchCoordinates = positionManager.lastKnownPosition().coordinates
+                searchSession?.search(s.toString(), searchCoordinates).let {
+                    searchResultsMutable.postValue(it)
+                }
             }
         }
-    }
-
-    private suspend fun search(searchInput: String) {
-        val searchCoordinates = positionManager.lastKnownPosition().coordinates
-        val searchRequest = SearchRequest(searchInput, searchCoordinates)
-
-        val searchListener = object : AutocompleteResultListener {
-            override fun onAutocomplete(autocompleteResult: List<AutocompleteResult>) {
-                searchResultsMutable.postValue(autocompleteResult)
-            }
-
-            override fun onAutocompleteError(status: ResultStatus) {
-                searchResultsMutable.postValue(emptyList())
-            }
-        }
-
-        searchSession?.autocomplete(searchRequest, searchListener)
     }
 
     private fun setCamera(geoCoordinates: GeoCoordinates) {
