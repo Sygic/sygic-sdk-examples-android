@@ -1,7 +1,11 @@
 package com.sygic.sdk.example.activity
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sygic.sdk.SygicEngine
@@ -15,9 +19,20 @@ import kotlin.coroutines.suspendCoroutine
 
 class SdkActivityViewModel : ViewModel() {
 
+    private val requestPermissionMutable = MutableLiveData<String>()
+    val requestPermission: LiveData<String> = requestPermissionMutable
+
     fun init(applicationContext: Context) {
         viewModelScope.launch {
             initSygicSdk(applicationContext)
+            requestPermissionMutable.postValue(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    fun onPermissionRequestResult(permission: String, result: Int) {
+        if (permission == Manifest.permission.ACCESS_FINE_LOCATION && result == PackageManager.PERMISSION_GRANTED) {
+            // start listening for GPS inside Sygic SDK
+            SygicEngine.openGpsConnection()
         }
     }
 
