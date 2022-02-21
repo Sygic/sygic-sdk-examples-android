@@ -10,14 +10,19 @@ import com.sygic.sdk.example.fragment.data.MapClickResult
 import com.sygic.sdk.example.fragment.data.MapFragmentDataModel
 import com.sygic.sdk.example.fragment.data.NavigationInfo
 import com.sygic.sdk.example.ktx.*
-import com.sygic.sdk.map.Camera
-import com.sygic.sdk.map.MapView
+import com.sygic.sdk.map.*
 import com.sygic.sdk.map.data.SimpleCameraDataModel
 import com.sygic.sdk.route.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SdkMapFragmentViewModel : ViewModel() {
+    private val mapAnimation = MapAnimation(200L, MapAnimation.InterpolationCurve.Decelerate)
+    private val mapCenterMiddle = MapCenter(0.5F, 0.5F)
+    private val mapCenterNavigation = MapCenter(0.5F, 0.25F)
+    private val mapCenterSettingsNavigation = MapCenterSettings(mapCenterNavigation, mapCenterNavigation, mapAnimation, mapAnimation)
+    private val mapCenterSettingsBrowseMap = MapCenterSettings(mapCenterMiddle, mapCenterMiddle, mapAnimation, mapAnimation)
+    private var mapMode: MapMode = MapMode.BROWSE_MAP
 
     private val gpsStateDrawableMutable = MutableLiveData<Int>()
     val gpsStateDrawable: LiveData<Int> = gpsStateDrawableMutable
@@ -55,6 +60,7 @@ class SdkMapFragmentViewModel : ViewModel() {
     }
 
     private suspend fun setMode(mapMode: MapMode) {
+        this.mapMode = mapMode
         if (mapMode == MapMode.NAVIGATION) {
             navigationManager.currentRoute()?.let {
                 mapDataModel.setMapRoute(it)
@@ -62,6 +68,7 @@ class SdkMapFragmentViewModel : ViewModel() {
             }
             lockCamera()
             cameraDataModel.tilt = 60F
+            cameraDataModel.mapCenterSettings = mapCenterSettingsNavigation
             navigationManager.routeChanged().collect {
                 it?.let {
                     mapDataModel.setMapRoute(it)
@@ -76,6 +83,7 @@ class SdkMapFragmentViewModel : ViewModel() {
             with(cameraDataModel) {
                 movementMode = Camera.MovementMode.Free
                 rotationMode = Camera.RotationMode.Free
+                mapCenterSettings = mapCenterSettingsBrowseMap
                 this.tilt = 0F
                 zoomLevel = 14F
                 position = positionManager.lastKnownPosition().takeIf { it.isValid() }?.coordinates
@@ -94,20 +102,28 @@ class SdkMapFragmentViewModel : ViewModel() {
     private fun initCameraModeListener() {
         cameraDataModel.addModeChangedListener(object : Camera.ModeChangedListener {
             override fun onMovementModeChanged(@Camera.MovementMode movementMode: Int) {
-                gpsStateDrawableMutable.postValue(
-                    when (movementMode) {
-                        Camera.MovementMode.FollowGpsPosition,
-                        Camera.MovementMode.FollowGpsPositionWithAutozoom -> R.drawable.ic_gps_locked
-                        else -> R.drawable.ic_gps_unlocked
-                    }
-                )
+                emitGpsStateDrawable(movementMode)
             }
 
             override fun onRotationModeChanged(@Camera.RotationMode rotationMode: Int) {}
         })
+        emitGpsStateDrawable(cameraDataModel.movementMode)
+    }
+
+    fun emitGpsStateDrawable(@Camera.MovementMode movementMode: Int) {
+        gpsStateDrawableMutable.postValue(
+            when (movementMode) {
+                Camera.MovementMode.FollowGpsPosition,
+                Camera.MovementMode.FollowGpsPositionWithAutozoom -> R.drawable.ic_gps_locked
+                else -> R.drawable.ic_gps_unlocked
+            }
+        )
     }
 
     fun onMapClicked(mapView: MapView, event: MotionEvent): Boolean {
+        if (mapMode == MapMode.NAVIGATION) {
+            return false
+        }
         mapClickResultMutable.postValue(null)
         mapView.requestObjectsAtPoint(event.x, event.y) { viewObjects, _, _, _ ->
             viewObjects.firstOrNull()?.let { viewObject ->
