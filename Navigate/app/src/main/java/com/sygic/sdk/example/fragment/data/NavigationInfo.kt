@@ -3,13 +3,15 @@ package com.sygic.sdk.example.fragment.data
 import com.sygic.sdk.example.utils.Units
 import com.sygic.sdk.route.RouteInfo
 
-data class NavigationInfo(val distance: String, val time: String) {
+data class NavigationInfo(val firstLine: String, val secondLine: String) {
 
     companion object {
         fun fromRouteInfo(routeInfo: RouteInfo): NavigationInfo {
             val distance = Units.formatMeters(routeInfo.length)
-            val time = Units.formatSecondsToClock(routeInfo.waypointDurations.last().withSpeedProfileAndTraffic)
-            return NavigationInfo(distance, time)
+            val duration = Units.formatDuration(routeInfo.waypointDurations.last().withSpeedProfileAndTraffic)
+            val eta = Units.formatEstimatedTime(routeInfo.waypointDurations.last().withSpeedProfileAndTraffic)
+            val secondLine = "$distance ・ $eta"
+            return NavigationInfo(duration, secondLine)
         }
     }
 }

@@ -1,15 +1,21 @@
 package com.sygic.sdk.example.utils
 
-import okhttp3.internal.format
+import java.text.DateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 private const val HairSpace = " "
 
 object Units {
-    fun formatSecondsToClock(seconds: Int): String {
+    fun formatDuration(seconds: Int): String {
         val hours = TimeUnit.SECONDS.toHours(seconds.toLong())
         val minutes = TimeUnit.SECONDS.toMinutes(seconds.toLong()) - TimeUnit.HOURS.toMinutes(hours)
-        return format("%02d:%02d", hours, minutes)
+        return if (hours > 0) "$hours${HairSpace}h $minutes${HairSpace}min" else "$minutes${HairSpace}min"
+    }
+
+    fun formatEstimatedTime(seconds: Int): String {
+        val date = Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(seconds.toLong()))
+        return DateFormat.getTimeInstance(DateFormat.SHORT).format(date)
     }
 
     fun formatMeters(meters: Int): String {

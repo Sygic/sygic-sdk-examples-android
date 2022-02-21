@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="4dp"
     android:layout_marginEnd="4dp"
-    android:background="@color/white"
+    android:background="?attr/colorSurface"
     app:behavior_hideable="true"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="32sp"
         app:layout_constraintBottom_toTopOf="@id/subtitle"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,32 +30,32 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
         tools:text="Subtitle" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/fabNavigation"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
+        style="@style/SquareButton"
+        android:layout_width="@dimen/squareButtonSize"
+        android:layout_height="@dimen/squareButtonSize"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_navigation"
-        app:fabSize="normal"
-        app:layout_constraintTop_toTopOf="parent"
+        app:icon="@drawable/ic_navigation"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/calculateRouteProgress"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
         android:layout_margin="16dp"
         android:indeterminate="true"
-        android:indeterminateTint="@color/black"
-        app:layout_constraintTop_toTopOf="parent"
+        android:indeterminateTint="?attr/colorOnSurface"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

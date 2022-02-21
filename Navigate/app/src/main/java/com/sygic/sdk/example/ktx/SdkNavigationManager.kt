@@ -4,6 +4,8 @@ import com.sygic.sdk.context.CoreInitCallback
 import com.sygic.sdk.context.CoreInitException
 import com.sygic.sdk.navigation.NavigationManager
 import com.sygic.sdk.navigation.NavigationManagerProvider
+import com.sygic.sdk.navigation.routeeventnotifications.DirectionInfo
+import com.sygic.sdk.navigation.routeeventnotifications.LaneInfo
 import com.sygic.sdk.route.Route
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -37,6 +39,24 @@ class SdkNavigationManager {
 
         manager.addOnRouteChangedListener(listener)
         awaitClose { manager.removeOnRouteChangedListener(listener) }
+    }
+
+    fun directions(): Flow<DirectionInfo> = callbackFlow {
+        val manager = get()
+        val listener = NavigationManager.OnDirectionListener {
+            launch { send(it) }
+        }
+        manager.addOnDirectionListener(listener)
+        awaitClose { manager.removeOnDirectionListener(listener) }
+    }
+
+    fun lanes(): Flow<LaneInfo> = callbackFlow {
+        val manager = get()
+        val listener= NavigationManager.OnLaneListener {
+            launch { send(it) }
+        }
+        manager.addOnLaneListener(listener)
+        awaitClose { manager.removeOnLaneListener (listener) }
     }
 
     suspend fun currentRoute(): Route? = get().currentRoute
