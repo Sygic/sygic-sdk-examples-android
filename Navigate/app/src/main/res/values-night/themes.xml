@@ -15,6 +15,6 @@
         <item name="primaryDirectionBackground">?attr/colorPrimary</item>
         <item name="secondaryDirectionBackground">?attr/colorPrimaryVariant</item>
         <item name="directionColor">?attr/colorOnPrimary</item>
-        <item name="directionShade">?attr/colorOnPrimary</item>
+        <item name="directionShade">@color/light_grey</item>
     </style>
 </resources>
