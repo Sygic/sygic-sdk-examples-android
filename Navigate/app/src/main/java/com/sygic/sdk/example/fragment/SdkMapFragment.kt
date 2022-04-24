@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sygic.sdk.example.databinding.FragmentSdkMapBinding
 import com.sygic.sdk.example.directions.DirectionsViewModel
+import com.sygic.sdk.example.extensions.isNightMode
 import com.sygic.sdk.example.laneguidance.LaneGuidanceViewModel
 import com.sygic.sdk.map.Camera
 import com.sygic.sdk.map.MapFragment
@@ -54,11 +55,11 @@ class SdkMapFragment : MapFragment() {
         initDirections()
         initLaneGuidance()
 
-        viewModel.gpsStateDrawable.observe(viewLifecycleOwner, {
+        viewModel.gpsStateDrawable.observe(viewLifecycleOwner) {
             binding.fabFollowGps.setIconResource(it)
             binding.navigationBottomSheet.infobarLeftButton.setIconResource(it)
-        })
-        viewModel.mapClickResult.observe(viewLifecycleOwner, { mapClickResult ->
+        }
+        viewModel.mapClickResult.observe(viewLifecycleOwner) { mapClickResult ->
             bottomSheetResult.state = mapClickResult?.let {
                 binding.resultBottomSheet.title.text = mapClickResult.title
                 binding.resultBottomSheet.subtitle.text = mapClickResult.subtitle
@@ -66,7 +67,7 @@ class SdkMapFragment : MapFragment() {
                 binding.resultBottomSheet.fabNavigation.visibility = View.VISIBLE
                 BottomSheetBehavior.STATE_COLLAPSED
             } ?: BottomSheetBehavior.STATE_HIDDEN
-        })
+        }
 
         bottomSheetResult.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
@@ -80,19 +81,21 @@ class SdkMapFragment : MapFragment() {
             }
         })
 
-        viewModel.navigationInfo.observe(viewLifecycleOwner, { navigationInfo ->
+        viewModel.navigationInfo.observe(viewLifecycleOwner) { navigationInfo ->
             if (navigationInfo != null) {
                 bottomSheetNavigation.state = BottomSheetBehavior.STATE_COLLAPSED
                 binding.navigationBottomSheet.firstLine.text = navigationInfo.firstLine
                 binding.navigationBottomSheet.secondLine.text = navigationInfo.secondLine
                 binding.fabFollowGps.visibility = View.GONE
+                binding.fabDayNightMode.visibility = View.GONE
                 binding.navigationDirectionsLayout.signpostContainer.visibility = View.VISIBLE
             } else {
                 binding.fabFollowGps.visibility = View.VISIBLE
+                binding.fabDayNightMode.visibility = View.VISIBLE
                 binding.navigationDirectionsLayout.signpostContainer.visibility = View.GONE
                 bottomSheetNavigation.state = BottomSheetBehavior.STATE_HIDDEN
             }
-        })
+        }
 
         bottomSheetNavigation.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
@@ -110,6 +113,7 @@ class SdkMapFragment : MapFragment() {
         binding.navigationBottomSheet.infobarRightButton.setOnClickListener { viewModel.stopNavigation() }
 
         binding.fabFollowGps.setOnClickListener { viewModel.lockCamera() }
+        binding.fabDayNightMode.setOnClickListener { viewModel.dayNightToggle(requireContext().isNightMode()) }
         binding.resultBottomSheet.fabNavigation.setOnClickListener {
             binding.resultBottomSheet.calculateRouteProgress.visibility = View.VISIBLE
             it.visibility = View.INVISIBLE
@@ -153,35 +157,35 @@ class SdkMapFragment : MapFragment() {
     }
 
     private fun initDirections() {
-        directionsViewModel.distance.observe(viewLifecycleOwner, {
+        directionsViewModel.distance.observe(viewLifecycleOwner) {
             binding.navigationDirectionsLayout.distanceTextView.text = it
-        })
-        directionsViewModel.primaryDirection.observe(viewLifecycleOwner, {
+        }
+        directionsViewModel.primaryDirection.observe(viewLifecycleOwner) {
             binding.navigationDirectionsLayout.primaryDirectionImageView.setImageResource(it)
-        })
-        directionsViewModel.instructionText.observe(viewLifecycleOwner, {
+        }
+        directionsViewModel.instructionText.observe(viewLifecycleOwner) {
             binding.navigationDirectionsLayout.instructionTextView.text =
                 it.getText(requireContext())
-        })
-        directionsViewModel.secondaryDirection.observe(viewLifecycleOwner, {
+        }
+        directionsViewModel.secondaryDirection.observe(viewLifecycleOwner) {
             binding.navigationDirectionsLayout.secondaryDirectionImageView.setImageResource(it)
-        })
-        directionsViewModel.secondaryDirectionText.observe(viewLifecycleOwner, {
+        }
+        directionsViewModel.secondaryDirectionText.observe(viewLifecycleOwner) {
             binding.navigationDirectionsLayout.secondaryDirectionTextView.text =
                 requireContext().getString(it)
-        })
-        directionsViewModel.secondaryDirectionContainerVisible.observe(viewLifecycleOwner, {
+        }
+        directionsViewModel.secondaryDirectionContainerVisible.observe(viewLifecycleOwner) {
             binding.navigationDirectionsLayout.secondaryDirectionContainer.visibility =
                 if (it == true) View.VISIBLE else View.GONE
-        })
+        }
     }
 
     private fun initLaneGuidance() {
-        laneGuidanceViewModel.lanesData.observe(viewLifecycleOwner, {
+        laneGuidanceViewModel.lanesData.observe(viewLifecycleOwner) {
             binding.simpleLanesView.lanesData = it
-        })
-        laneGuidanceViewModel.isActive.observe(viewLifecycleOwner, {
+        }
+        laneGuidanceViewModel.isActive.observe(viewLifecycleOwner) {
             binding.simpleLanesView.visibility = if (it) View.VISIBLE else View.INVISIBLE
-        })
+        }
     }
 }

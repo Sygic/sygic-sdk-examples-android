@@ -23,7 +23,7 @@ class SdkActivity : AppCompatActivity() {
 
         sdkServiceLifecycleObserver = SdkServiceLifecycleObserver(applicationContext)
 
-        viewModel.requestPermission.observe(this, { checkForPermission(it) })
+        viewModel.requestPermission.observe(this) { checkForPermission(it) }
         viewModel.init(applicationContext)
 
         binding = ActivitySdkBinding.inflate(layoutInflater)

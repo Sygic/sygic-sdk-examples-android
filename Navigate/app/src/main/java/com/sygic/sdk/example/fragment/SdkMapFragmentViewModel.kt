@@ -1,6 +1,7 @@
 package com.sygic.sdk.example.fragment
 
 import android.view.MotionEvent
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,8 +21,10 @@ class SdkMapFragmentViewModel : ViewModel() {
     private val mapAnimation = MapAnimation(200L, MapAnimation.InterpolationCurve.Decelerate)
     private val mapCenterMiddle = MapCenter(0.5F, 0.5F)
     private val mapCenterNavigation = MapCenter(0.5F, 0.25F)
-    private val mapCenterSettingsNavigation = MapCenterSettings(mapCenterNavigation, mapCenterNavigation, mapAnimation, mapAnimation)
-    private val mapCenterSettingsBrowseMap = MapCenterSettings(mapCenterMiddle, mapCenterMiddle, mapAnimation, mapAnimation)
+    private val mapCenterSettingsNavigation =
+        MapCenterSettings(mapCenterNavigation, mapCenterNavigation, mapAnimation, mapAnimation)
+    private val mapCenterSettingsBrowseMap =
+        MapCenterSettings(mapCenterMiddle, mapCenterMiddle, mapAnimation, mapAnimation)
     private var mapMode: MapMode = MapMode.BROWSE_MAP
 
     private val gpsStateDrawableMutable = MutableLiveData<Int>()
@@ -89,6 +92,16 @@ class SdkMapFragmentViewModel : ViewModel() {
                 position = positionManager.lastKnownPosition().takeIf { it.isValid() }?.coordinates
                     ?: positionManager.position().coordinates
             }
+        }
+    }
+
+    fun dayNightToggle(isNightMode: Boolean) {
+        if (isNightMode) {
+            mapDataModel.skin = listOf("day")
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        } else {
+            mapDataModel.skin = listOf("night")
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }
     }
 
