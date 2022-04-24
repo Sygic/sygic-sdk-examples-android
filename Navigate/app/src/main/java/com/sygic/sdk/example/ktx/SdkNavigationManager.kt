@@ -31,6 +31,11 @@ class SdkNavigationManager {
         }
     }
 
+    suspend fun enableAudioInstructions() {
+        val manager = get()
+        manager.setAudioInstructionListener { false }
+    }
+
     fun routeChanged(): Flow<Route?> = callbackFlow {
         val manager = get()
         val listener = NavigationManager.OnRouteChangedListener { route, _ ->

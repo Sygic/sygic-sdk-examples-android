@@ -13,9 +13,11 @@ import com.sygic.sdk.example.fragment.data.NavigationInfo
 import com.sygic.sdk.example.ktx.*
 import com.sygic.sdk.map.*
 import com.sygic.sdk.map.data.SimpleCameraDataModel
-import com.sygic.sdk.route.*
+import com.sygic.sdk.route.RouteRequest
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SdkMapFragmentViewModel : ViewModel() {
     private val mapAnimation = MapAnimation(200L, MapAnimation.InterpolationCurve.Decelerate)
@@ -42,6 +44,7 @@ class SdkMapFragmentViewModel : ViewModel() {
     private val navigationManager = SdkNavigationManager()
     private val reverseGeocoder = SdkReverseGeocoder()
     private val positionManager = SdkPositionManager()
+    private val voiceManager = SdkVoiceManager()
 
     private enum class MapMode {
         BROWSE_MAP,
@@ -55,6 +58,9 @@ class SdkMapFragmentViewModel : ViewModel() {
                 setMode(MapMode.NAVIGATION)
             } ?: setMode(MapMode.BROWSE_MAP)
         }
+        viewModelScope.launch {
+            initVoice()
+        }
     }
 
     override fun onCleared() {
@@ -65,6 +71,7 @@ class SdkMapFragmentViewModel : ViewModel() {
     private suspend fun setMode(mapMode: MapMode) {
         this.mapMode = mapMode
         if (mapMode == MapMode.NAVIGATION) {
+            navigationManager.enableAudioInstructions()
             navigationManager.currentRoute()?.let {
                 mapDataModel.setMapRoute(it)
                 navigationInfoMutable.postValue(NavigationInfo.fromRouteInfo(it.routeInfo))
@@ -187,6 +194,18 @@ class SdkMapFragmentViewModel : ViewModel() {
     fun stopNavigation() {
         viewModelScope.launch {
             setMode(MapMode.BROWSE_MAP)
+        }
+    }
+
+    private suspend fun initVoice() = withContext(Dispatchers.Default){
+        val installedVoices = voiceManager.getInstalledVoices()
+        val defaultVoice = voiceManager.getDefaultTts()
+        if (installedVoices.isNotEmpty()) {
+            voiceManager.setVoice(installedVoices.firstOrNull {
+                it.language.compareTo(defaultVoice, true) == 0
+            } ?: installedVoices.firstOrNull {
+                it.language.compareTo("en-US", true) == 0
+            } ?: installedVoices.first())
         }
     }
 }
