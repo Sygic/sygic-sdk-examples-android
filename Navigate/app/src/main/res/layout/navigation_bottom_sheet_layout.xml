@@ -14,12 +14,12 @@
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/infobarLeftButton"
+        android:id="@+id/btnVoiceGuidance"
         style="@style/SquareButton"
         android:layout_width="@dimen/squareButtonSize"
         android:layout_height="@dimen/squareButtonSize"
         android:layout_gravity="center"
-        app:icon="@drawable/ic_gps_locked" />
+        app:icon="@drawable/ic_volume_on" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/infobarRightButton"
+        android:id="@+id/btnCancelRoute"
         style="@style/SquareButton"
         android:layout_width="@dimen/squareButtonSize"
         android:layout_height="@dimen/squareButtonSize"

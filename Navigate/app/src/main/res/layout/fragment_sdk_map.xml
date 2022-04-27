@@ -12,24 +12,25 @@
         android:layout_height="match_parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/fabFollowGps"
-        style="@style/SquareButton"
-        android:layout_width="@dimen/squareButtonSize"
-        android:layout_height="@dimen/squareButtonSize"
-        android:layout_margin="8dp"
-        app:icon="@drawable/ic_gps_locked"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.button.MaterialButton
         android:id="@+id/fabDayNightMode"
         style="@style/SquareButton"
         android:layout_width="@dimen/squareButtonSize"
         android:layout_height="@dimen/squareButtonSize"
         android:layout_margin="8dp"
         app:icon="@drawable/ic_day_night"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/fabFollowGps"
+        style="@style/SquareButton"
+        android:layout_width="@dimen/squareButtonSize"
+        android:layout_height="@dimen/squareButtonSize"
+        android:layout_margin="8dp"
+        app:icon="@drawable/ic_gps_locked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fabDayNightMode" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"

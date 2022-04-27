@@ -38,6 +38,10 @@ class SdkMapFragmentViewModel : ViewModel() {
     private val navigationInfoMutable = MutableLiveData<NavigationInfo?>()
     val navigationInfo: LiveData<NavigationInfo?> = navigationInfoMutable
 
+    private var voiceGuidanceEnabled = true
+    private val voiceGuidanceIconMutable = MutableLiveData(R.drawable.ic_volume_on)
+    val voiceGuidanceIcon: LiveData<Int> = voiceGuidanceIconMutable
+
     val cameraDataModel = SimpleCameraDataModel()
     val mapDataModel = MapFragmentDataModel()
 
@@ -71,7 +75,7 @@ class SdkMapFragmentViewModel : ViewModel() {
     private suspend fun setMode(mapMode: MapMode) {
         this.mapMode = mapMode
         if (mapMode == MapMode.NAVIGATION) {
-            navigationManager.enableAudioInstructions()
+            navigationManager.setAudioInstructions(voiceGuidanceEnabled)
             navigationManager.currentRoute()?.let {
                 mapDataModel.setMapRoute(it)
                 navigationInfoMutable.postValue(NavigationInfo.fromRouteInfo(it.routeInfo))
@@ -109,6 +113,14 @@ class SdkMapFragmentViewModel : ViewModel() {
         } else {
             mapDataModel.skin = listOf("night")
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
+    }
+
+    fun toggleVoiceGuidance() {
+        viewModelScope.launch {
+            voiceGuidanceEnabled = voiceGuidanceEnabled.not()
+            navigationManager.setAudioInstructions(voiceGuidanceEnabled)
+            voiceGuidanceIconMutable.value = if (voiceGuidanceEnabled) R.drawable.ic_volume_on else R.drawable.ic_volume_off
         }
     }
 

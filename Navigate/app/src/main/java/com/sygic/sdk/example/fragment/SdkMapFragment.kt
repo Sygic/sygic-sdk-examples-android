@@ -57,7 +57,9 @@ class SdkMapFragment : MapFragment() {
 
         viewModel.gpsStateDrawable.observe(viewLifecycleOwner) {
             binding.fabFollowGps.setIconResource(it)
-            binding.navigationBottomSheet.infobarLeftButton.setIconResource(it)
+        }
+        viewModel.voiceGuidanceIcon.observe(viewLifecycleOwner) {
+            binding.navigationBottomSheet.btnVoiceGuidance.setIconResource(it)
         }
         viewModel.mapClickResult.observe(viewLifecycleOwner) { mapClickResult ->
             bottomSheetResult.state = mapClickResult?.let {
@@ -86,12 +88,8 @@ class SdkMapFragment : MapFragment() {
                 bottomSheetNavigation.state = BottomSheetBehavior.STATE_COLLAPSED
                 binding.navigationBottomSheet.firstLine.text = navigationInfo.firstLine
                 binding.navigationBottomSheet.secondLine.text = navigationInfo.secondLine
-                binding.fabFollowGps.visibility = View.GONE
-                binding.fabDayNightMode.visibility = View.GONE
                 binding.navigationDirectionsLayout.signpostContainer.visibility = View.VISIBLE
             } else {
-                binding.fabFollowGps.visibility = View.VISIBLE
-                binding.fabDayNightMode.visibility = View.VISIBLE
                 binding.navigationDirectionsLayout.signpostContainer.visibility = View.GONE
                 bottomSheetNavigation.state = BottomSheetBehavior.STATE_HIDDEN
             }
@@ -109,8 +107,8 @@ class SdkMapFragment : MapFragment() {
             }
         })
 
-        binding.navigationBottomSheet.infobarLeftButton.setOnClickListener { viewModel.lockCamera() }
-        binding.navigationBottomSheet.infobarRightButton.setOnClickListener { viewModel.stopNavigation() }
+        binding.navigationBottomSheet.btnVoiceGuidance.setOnClickListener { viewModel.toggleVoiceGuidance() }
+        binding.navigationBottomSheet.btnCancelRoute.setOnClickListener { viewModel.stopNavigation() }
 
         binding.fabFollowGps.setOnClickListener { viewModel.lockCamera() }
         binding.fabDayNightMode.setOnClickListener { viewModel.dayNightToggle(requireContext().isNightMode()) }
