@@ -8,13 +8,18 @@ import com.sygic.sdk.example.R
 import com.sygic.sdk.example.fragment.data.TextHolder
 import com.sygic.sdk.example.ktx.SdkNavigationManager
 import com.sygic.sdk.example.utils.Units
-import com.sygic.sdk.example.utils.createInstructionText
-import com.sygic.sdk.example.utils.getDirectionDrawable
+import com.sygic.sdk.example.directions.extensions.createInstructionText
+import com.sygic.sdk.example.directions.extensions.getDirectionDrawable
 import com.sygic.sdk.navigation.routeeventnotifications.DirectionInfo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DirectionsViewModel : ViewModel() {
+@HiltViewModel
+class DirectionsViewModel @Inject constructor(
+    private val navigationManager: SdkNavigationManager
+) : ViewModel() {
 
     private val distanceMutable = MutableLiveData<String>()
     val distance: LiveData<String> = distanceMutable
@@ -29,8 +34,6 @@ class DirectionsViewModel : ViewModel() {
         secondaryDirectionContainerVisibleMutable
     private val instructionTextMutable = MutableLiveData<TextHolder>()
     val instructionText: LiveData<TextHolder> = instructionTextMutable
-
-    private val navigationManager = SdkNavigationManager()
 
     init {
         viewModelScope.launch {

@@ -14,12 +14,24 @@ import com.sygic.sdk.example.ktx.*
 import com.sygic.sdk.map.*
 import com.sygic.sdk.map.data.SimpleCameraDataModel
 import com.sygic.sdk.route.RouteRequest
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class SdkMapFragmentViewModel : ViewModel() {
+@HiltViewModel
+class SdkMapFragmentViewModel @Inject constructor(
+    private val navigationManager: SdkNavigationManager,
+    private val reverseGeocoder: SdkReverseGeocoder,
+    private val positionManager: SdkPositionManager,
+    private val voiceManager: SdkVoiceManager,
+    private val sdkRouter: SdkRouter,
+    val cameraDataModel: SimpleCameraDataModel,
+    val mapDataModel: MapFragmentDataModel
+) : ViewModel() {
+
     private val mapAnimation = MapAnimation(200L, MapAnimation.InterpolationCurve.Decelerate)
     private val mapCenterMiddle = MapCenter(0.5F, 0.5F)
     private val mapCenterNavigation = MapCenter(0.5F, 0.25F)
@@ -41,14 +53,6 @@ class SdkMapFragmentViewModel : ViewModel() {
     private var voiceGuidanceEnabled = true
     private val voiceGuidanceIconMutable = MutableLiveData(R.drawable.ic_volume_on)
     val voiceGuidanceIcon: LiveData<Int> = voiceGuidanceIconMutable
-
-    val cameraDataModel = SimpleCameraDataModel()
-    val mapDataModel = MapFragmentDataModel()
-
-    private val navigationManager = SdkNavigationManager()
-    private val reverseGeocoder = SdkReverseGeocoder()
-    private val positionManager = SdkPositionManager()
-    private val voiceManager = SdkVoiceManager()
 
     private enum class MapMode {
         BROWSE_MAP,
@@ -120,7 +124,8 @@ class SdkMapFragmentViewModel : ViewModel() {
         viewModelScope.launch {
             voiceGuidanceEnabled = voiceGuidanceEnabled.not()
             navigationManager.setAudioInstructions(voiceGuidanceEnabled)
-            voiceGuidanceIconMutable.value = if (voiceGuidanceEnabled) R.drawable.ic_volume_on else R.drawable.ic_volume_off
+            voiceGuidanceIconMutable.value =
+                if (voiceGuidanceEnabled) R.drawable.ic_volume_on else R.drawable.ic_volume_off
         }
     }
 
@@ -191,7 +196,7 @@ class SdkMapFragmentViewModel : ViewModel() {
                 setStart(fromPosition)
                 setDestination(toPosition)
             }
-            val route = SdkRouter().computeRoute(routeRequest) ?: return@launch
+            val route = sdkRouter.computeRoute(routeRequest) ?: return@launch
 
             navigationManager.stopNavigation()
             mapClickResultMutable.postValue(null)
@@ -209,7 +214,7 @@ class SdkMapFragmentViewModel : ViewModel() {
         }
     }
 
-    private suspend fun initVoice() = withContext(Dispatchers.Default){
+    private suspend fun initVoice() = withContext(Dispatchers.Default) {
         val installedVoices = voiceManager.getInstalledVoices()
         val defaultVoice = voiceManager.getDefaultTts()
         if (installedVoices.isNotEmpty()) {

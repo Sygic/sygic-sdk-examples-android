@@ -8,12 +8,15 @@ import com.sygic.sdk.example.R
 import com.sygic.sdk.example.ktx.SdkNavigationManager
 import com.sygic.sdk.example.laneguidance.data.LanesData
 import com.sygic.sdk.navigation.routeeventnotifications.LaneInfo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LaneGuidanceViewModel : ViewModel() {
-
-    private val navigationManager = SdkNavigationManager()
+@HiltViewModel
+class LaneGuidanceViewModel @Inject constructor(
+    private val navigationManager: SdkNavigationManager
+) : ViewModel() {
 
     private val isActiveMutable = MutableLiveData(false)
     val isActive: LiveData<Boolean> = isActiveMutable

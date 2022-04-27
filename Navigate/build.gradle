@@ -5,6 +5,7 @@ buildscript {
         plugin_version = "7.0.2"
         build_tools_version = "31.0.0"
         kotlin_version = "1.6.10"
+        hilt_version = "2.38.1"
         compile_sdk_version = 31
         target_sdk_version = 31
     }
@@ -16,6 +17,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$plugin_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

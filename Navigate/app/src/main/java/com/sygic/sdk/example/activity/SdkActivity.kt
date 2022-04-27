@@ -9,10 +9,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sygic.sdk.example.databinding.ActivitySdkBinding
 import com.sygic.sdk.example.service.SdkServiceLifecycleObserver
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val PermissionRequestCode = 158
 
+@AndroidEntryPoint
 class SdkActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivitySdkBinding
     private lateinit var sdkServiceLifecycleObserver: SdkServiceLifecycleObserver
     private val viewModel: SdkActivityViewModel by viewModels()
@@ -24,7 +27,7 @@ class SdkActivity : AppCompatActivity() {
         sdkServiceLifecycleObserver = SdkServiceLifecycleObserver(applicationContext)
 
         viewModel.requestPermission.observe(this) { checkForPermission(it) }
-        viewModel.init(applicationContext)
+        viewModel.init()
 
         binding = ActivitySdkBinding.inflate(layoutInflater)
         setContentView(binding.root)

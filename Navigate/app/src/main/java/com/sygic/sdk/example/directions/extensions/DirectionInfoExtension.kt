@@ -1,4 +1,4 @@
-package com.sygic.sdk.example.utils
+package com.sygic.sdk.example.directions.extensions
 
 import com.sygic.sdk.example.R
 import com.sygic.sdk.example.fragment.data.TextHolder

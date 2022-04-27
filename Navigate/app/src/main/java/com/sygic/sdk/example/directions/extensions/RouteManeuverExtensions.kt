@@ -1,4 +1,4 @@
-package com.sygic.sdk.example.utils
+package com.sygic.sdk.example.directions.extensions
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

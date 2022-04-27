@@ -17,15 +17,18 @@ import com.sygic.sdk.map.MapFragment
 import com.sygic.sdk.map.MapView
 import com.sygic.sdk.map.listeners.OnMapInitListener
 import com.sygic.sdk.map.mapgesturesdetector.listener.MapGestureAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+@AndroidEntryPoint
 class SdkMapFragment : MapFragment() {
     private lateinit var binding: FragmentSdkMapBinding
     private lateinit var bottomSheetResult: BottomSheetBehavior<View>
     private lateinit var bottomSheetNavigation: BottomSheetBehavior<View>
+
     private val viewModel: SdkMapFragmentViewModel by viewModels()
     private val directionsViewModel: DirectionsViewModel by viewModels()
     private val laneGuidanceViewModel: LaneGuidanceViewModel by viewModels()
