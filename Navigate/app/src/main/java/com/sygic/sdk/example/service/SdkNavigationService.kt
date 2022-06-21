@@ -71,6 +71,7 @@ class SdkNavigationService : Service() {
 
     private fun getPendingIntent(): PendingIntent {
         val contentIntent = Intent(baseContext, SdkActivity::class.java)
-        return PendingIntent.getActivity(baseContext, 0, contentIntent, 0)
+        val pendingIntentFlag = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+        return PendingIntent.getActivity(baseContext, 0, contentIntent, pendingIntentFlag)
     }
 }
