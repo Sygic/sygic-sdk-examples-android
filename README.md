@@ -15,7 +15,8 @@ Each folder contains an Android Studio project. Projects are independent from ea
 ## How to run
 
 1. Clone this repository
-2. Get your [API key](https://www.sygic.com/enterprise/get-api-key)
+2. Get your [API key](https://www.sygic.com/enterprise/get-api-key) and offline lincense
 3. Open project/folder which you would like to try in Android Studio
 4. Put API key into local.properties of this project as sygic.sdk.client.id="your api key"
-5. Run
+5. Put offline license into local.properties of this project as sygic.sdk.offline.license="your offline license"
+6. Run

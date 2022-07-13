@@ -1,7 +1,7 @@
 package com.sygic.sdk.example.dependencyinjection
 
 import android.content.Context
-import com.sygic.sdk.example.ktx.*
+import com.sygic.sdk.example.common.ktx.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

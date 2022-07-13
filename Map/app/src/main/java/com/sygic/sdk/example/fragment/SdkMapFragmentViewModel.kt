@@ -6,24 +6,27 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sygic.sdk.example.R
-import com.sygic.sdk.example.fragment.data.MapClickResult
-import com.sygic.sdk.example.ktx.SdkPositionManager
-import com.sygic.sdk.example.ktx.SdkReverseGeocoder
-import com.sygic.sdk.example.ktx.subtitle
-import com.sygic.sdk.example.ktx.title
+import com.sygic.sdk.example.common.data.MapFragmentDataModel
+import com.sygic.sdk.example.common.extensions.subtitle
+import com.sygic.sdk.example.common.extensions.title
+import com.sygic.sdk.example.common.ktx.SdkPositionManager
+import com.sygic.sdk.example.common.ktx.SdkReverseGeocoder
+import com.sygic.sdk.example.common.data.MapClickResult
 import com.sygic.sdk.map.Camera
 import com.sygic.sdk.map.MapView
 import com.sygic.sdk.map.`object`.MapMarker
 import com.sygic.sdk.map.data.SimpleCameraDataModel
-import com.sygic.sdk.map.data.SimpleMapDataModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SdkMapFragmentViewModel : ViewModel() {
-
-    val cameraDataModel = SimpleCameraDataModel()
-    val mapDataModel = SimpleMapDataModel()
-    private val positionManager = SdkPositionManager()
-    private val reverseGeocoder = SdkReverseGeocoder()
+@HiltViewModel
+class SdkMapFragmentViewModel @Inject constructor(
+    private val positionManager: SdkPositionManager,
+    private val reverseGeocoder: SdkReverseGeocoder,
+    val cameraDataModel: SimpleCameraDataModel,
+    val mapDataModel: MapFragmentDataModel
+) : ViewModel() {
 
     private val gpsStateDrawableMutable = MutableLiveData<Int>()
     val gpsStateDrawable: LiveData<Int> = gpsStateDrawableMutable

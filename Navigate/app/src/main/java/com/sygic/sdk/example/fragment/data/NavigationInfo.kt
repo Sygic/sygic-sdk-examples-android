@@ -1,6 +1,6 @@
 package com.sygic.sdk.example.fragment.data
 
-import com.sygic.sdk.example.utils.Units
+import com.sygic.sdk.example.common.utils.Units
 import com.sygic.sdk.route.RouteInfo
 
 data class NavigationInfo(val firstLine: String, val secondLine: String) {

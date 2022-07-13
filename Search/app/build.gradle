@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -15,9 +17,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        // use your own SDK client ID
-        buildConfigField "String", "SYGIC_SDK_CLIENT_ID", getSdkClientId()
     }
 
     buildTypes {
@@ -40,29 +39,8 @@ android {
 }
 
 dependencies {
-    implementation("com.sygic.sdk:maps-android:${sygic_sdk_version}@aar") {
-        transitive = true
-    }
+    implementation(project(":common"))
 
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
-    implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-}
-
-def getSdkClientId() {
-    def sdkClientId = ""
-
-    def localProperties = project.rootProject.file('local.properties')
-    if (localProperties.exists()) {
-        Properties properties = new Properties()
-        properties.load(localProperties.newDataInputStream())
-        sdkClientId = properties.getProperty('sygic.sdk.client.id', "")
-    }
-
-    if (sdkClientId.isEmpty()) {
-        logger.error('Missing Client ID for Sygic Maps SDK! Define one in local.properties as sygic.sdk.client.id="YOUR.CLIENT.ID"')
-    }
-
-    return sdkClientId
+    implementation "com.google.dagger:hilt-android:${hilt_version}"
+    kapt "com.google.dagger:hilt-compiler:${hilt_version}"
 }

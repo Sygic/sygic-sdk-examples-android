@@ -7,9 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sygic.sdk.example.databinding.ActivitySdkBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val PermissionRequestCode = 158
 
+@AndroidEntryPoint
 class SdkActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySdkBinding
     private val viewModel: SdkActivityViewModel by viewModels()
@@ -17,9 +19,8 @@ class SdkActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // init Sygic Maps SDK
-        viewModel.requestPermission.observe(this, { checkForPermission(it) })
-        viewModel.init(applicationContext)
+        viewModel.requestPermission.observe(this) { checkForPermission(it) }
+        viewModel.init()
 
         binding = ActivitySdkBinding.inflate(layoutInflater)
         setContentView(binding.root)

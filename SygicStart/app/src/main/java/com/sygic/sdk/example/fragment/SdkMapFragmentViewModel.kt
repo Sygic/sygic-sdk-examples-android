@@ -4,10 +4,13 @@ import androidx.lifecycle.ViewModel
 import com.sygic.sdk.map.Camera
 import com.sygic.sdk.map.data.SimpleCameraDataModel
 import com.sygic.sdk.position.GeoCoordinates
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SdkMapFragmentViewModel : ViewModel() {
-
-    val cameraDataModel = SimpleCameraDataModel()
+@HiltViewModel
+class SdkMapFragmentViewModel @Inject constructor(
+    val cameraDataModel: SimpleCameraDataModel
+) : ViewModel() {
 
     companion object {
         private val London = GeoCoordinates(51.50853,  -0.12574)

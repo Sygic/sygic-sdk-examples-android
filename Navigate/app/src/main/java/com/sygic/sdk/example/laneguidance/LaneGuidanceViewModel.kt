@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sygic.sdk.example.R
-import com.sygic.sdk.example.ktx.SdkNavigationManager
+import com.sygic.sdk.example.common.ktx.SdkNavigationManager
 import com.sygic.sdk.example.laneguidance.data.LanesData
 import com.sygic.sdk.navigation.routeeventnotifications.LaneInfo
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -8,7 +8,9 @@ import androidx.fragment.app.viewModels
 import com.sygic.sdk.example.databinding.FragmentSdkMapBinding
 import com.sygic.sdk.map.Camera
 import com.sygic.sdk.map.MapFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SdkMapFragment : MapFragment() {
     private lateinit var binding: FragmentSdkMapBinding
     private val viewModel: SdkMapFragmentViewModel by viewModels()
@@ -29,12 +31,12 @@ class SdkMapFragment : MapFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.gpsStateDrawable.observe(viewLifecycleOwner, {
+        viewModel.gpsStateDrawable.observe(viewLifecycleOwner) {
             binding.fabFollowGps.setImageResource(it)
-        })
-        viewModel.cameraStateDrawable.observe(viewLifecycleOwner, {
+        }
+        viewModel.cameraStateDrawable.observe(viewLifecycleOwner) {
             binding.fabCameraMode.setImageResource(it)
-        })
+        }
         binding.fabFollowGps.setOnClickListener { viewModel.followGps() }
         binding.fabCameraMode.setOnClickListener { viewModel.toggle2D3D() }
         binding.fabNorthUp.setOnClickListener { viewModel.northUp() }

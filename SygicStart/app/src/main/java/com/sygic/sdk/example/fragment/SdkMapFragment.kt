@@ -8,7 +8,9 @@ import androidx.fragment.app.viewModels
 import com.sygic.sdk.example.databinding.FragmentSdkMapBinding
 import com.sygic.sdk.map.Camera
 import com.sygic.sdk.map.MapFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SdkMapFragment : MapFragment() {
     private lateinit var binding: FragmentSdkMapBinding
     private val viewModel: SdkMapFragmentViewModel by viewModels()
