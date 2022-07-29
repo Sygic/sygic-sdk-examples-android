@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sygic.sdk.example.R
 import com.sygic.sdk.example.fragment.data.TextHolder
-import com.sygic.sdk.example.ktx.SdkNavigationManager
-import com.sygic.sdk.example.utils.Units
+import com.sygic.sdk.example.common.ktx.SdkNavigationManager
+import com.sygic.sdk.example.common.utils.Units
 import com.sygic.sdk.example.directions.extensions.createInstructionText
 import com.sygic.sdk.example.directions.extensions.getDirectionDrawable
 import com.sygic.sdk.navigation.routeeventnotifications.DirectionInfo

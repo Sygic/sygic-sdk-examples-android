@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sygic.sdk.example.databinding.FragmentSdkMapBinding
 import com.sygic.sdk.example.directions.DirectionsViewModel
-import com.sygic.sdk.example.extensions.isNightMode
+import com.sygic.sdk.example.common.extensions.isNightMode
 import com.sygic.sdk.example.laneguidance.LaneGuidanceViewModel
 import com.sygic.sdk.map.Camera
 import com.sygic.sdk.map.MapFragment

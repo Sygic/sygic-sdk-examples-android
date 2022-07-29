@@ -1,0 +1,99 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tools_version
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion target_sdk_version
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // use your own SDK client ID
+        buildConfigField "String", "SYGIC_SDK_CLIENT_ID", getSdkClientId()
+        // use your own SDK offline license
+        buildConfigField "String", "SYGIC_SDK_OFFLINE_LICENSE", getSdkOfflineLicense()
+        // enable/disable custom places feature in sdk
+        buildConfigField "boolean", "SYGIC_SDK_CUSTOM_PLACES", enableCustomPlaces()
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
+    }
+}
+
+dependencies {
+    api("com.sygic.sdk:maps-android:${sygic_sdk_version}@aar") {
+        transitive = true
+    }
+
+    api 'androidx.navigation:navigation-fragment-ktx:2.4.2'
+    api 'androidx.navigation:navigation-ui-ktx:2.4.2'
+    api 'com.google.android.material:material:1.5.0'
+    api 'androidx.legacy:legacy-support-v4:1.0.0'
+    api "com.google.dagger:hilt-android:${hilt_version}"
+    kapt "com.google.dagger:hilt-compiler:${hilt_version}"
+}
+
+def getSdkClientId() {
+    def sdkClientId = ""
+
+    def localProperties = project.rootProject.file('local.properties')
+    if (localProperties.exists()) {
+        Properties properties = new Properties()
+        properties.load(localProperties.newDataInputStream())
+        sdkClientId = properties.getProperty('sygic.sdk.client.id', "")
+    }
+
+    if (sdkClientId.isEmpty()) {
+        logger.error('Missing Client ID for Sygic Maps SDK! Define one in local.properties as sygic.sdk.client.id="YOUR.CLIENT.ID"')
+    }
+
+    return sdkClientId
+}
+
+def getSdkOfflineLicense() {
+    def sdkOfflineLicense = ""
+
+    def localProperties = project.rootProject.file('local.properties')
+    if (localProperties.exists()) {
+        Properties properties = new Properties()
+        properties.load(localProperties.newDataInputStream())
+        sdkOfflineLicense = properties.getProperty('sygic.sdk.offline.license', "")
+    }
+
+    if (sdkClientId.isEmpty()) {
+        logger.error('Missing offline license for Sygic Maps SDK! Define one in local.properties as sygic.sdk.offline.license="YOUR.OFFLINE.LICENSE"')
+    }
+
+    return sdkOfflineLicense
+}
+
+def enableCustomPlaces() {
+    def enableCustomPlaces = "false"
+
+    def localProperties = project.rootProject.file('local.properties')
+    if (localProperties.exists()) {
+        Properties properties = new Properties()
+        properties.load(localProperties.newDataInputStream())
+        enableCustomPlaces = properties.getProperty('sygic.sdk.custom.places', "false")
+    }
+
+    return enableCustomPlaces
+}

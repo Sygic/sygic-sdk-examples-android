@@ -1,7 +1,7 @@
 package com.sygic.sdk.example.dependencyinjection
 
-import com.sygic.sdk.example.fragment.data.MapFragmentDataModel
-import com.sygic.sdk.example.ktx.SdkRouter
+import com.sygic.sdk.example.common.ktx.SdkRouter
+import com.sygic.sdk.example.common.data.MapFragmentDataModel
 import com.sygic.sdk.map.data.SimpleCameraDataModel
 import dagger.Module
 import dagger.Provides

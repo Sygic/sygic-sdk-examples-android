@@ -4,28 +4,31 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sygic.sdk.example.ktx.SdkPositionManager
-import com.sygic.sdk.example.ktx.SdkSearchManager
-import com.sygic.sdk.example.ktx.SdkSearchSession
+import com.sygic.sdk.example.common.data.MapFragmentDataModel
+import com.sygic.sdk.example.common.ktx.SdkPositionManager
+import com.sygic.sdk.example.common.ktx.SdkSearchManager
+import com.sygic.sdk.example.common.ktx.SdkSearchSession
 import com.sygic.sdk.map.Camera
 import com.sygic.sdk.map.`object`.MapMarker
 import com.sygic.sdk.map.data.SimpleCameraDataModel
-import com.sygic.sdk.map.data.SimpleMapDataModel
 import com.sygic.sdk.position.GeoCoordinates
-import com.sygic.sdk.search.AutocompleteResult
-import com.sygic.sdk.search.GeocodeLocationRequest
-import com.sygic.sdk.search.GeocodingResult
+import com.sygic.sdk.search.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SdkMapFragmentViewModel : ViewModel() {
+@HiltViewModel
+class SdkMapFragmentViewModel @Inject constructor(
+    private val positionManager: SdkPositionManager,
+    private val searchManager: SdkSearchManager,
+    val cameraDataModel: SimpleCameraDataModel,
+    val mapDataModel: MapFragmentDataModel
 
-    val cameraDataModel = SimpleCameraDataModel()
-    val mapDataModel = SimpleMapDataModel()
-    private val positionManager = SdkPositionManager()
-    private val searchManager = SdkSearchManager()
+) : ViewModel() {
 
     private var mapMarker: MapMarker? = null
+    private var search: Search? = null
     private var searchJob: Job? = null
     private var searchSession: SdkSearchSession? = null
 
@@ -41,6 +44,9 @@ class SdkMapFragmentViewModel : ViewModel() {
                 positionManager.lastKnownPosition().takeIf { it.isValid() }?.coordinates
                     ?: positionManager.position().coordinates
             setCamera(initialPosition)
+        }
+        viewModelScope.launch {
+            search = initSearch()
         }
     }
 
@@ -68,7 +74,6 @@ class SdkMapFragmentViewModel : ViewModel() {
                 searchSession = null
                 val geocodeLocationRequest = GeocodeLocationRequest(result.locationId)
                 val geocodingResult = it.geocode(geocodeLocationRequest)
-                searchManager.closeSession(it)
                 geocodingResult?.let {
                     clearMapResultMarker()
                     mapMarker = MapMarker.at(geocodingResult.location).build().apply {
@@ -83,21 +88,23 @@ class SdkMapFragmentViewModel : ViewModel() {
 
     fun onSearchTextChanged(s: CharSequence?) {
         viewModelScope.launch {
-            searchJob?.let {
-                it.cancel()
-                it.join()
-            }
+            search?.let { search ->
+                searchJob?.let { job ->
+                    job.cancel()
+                    job.join()
+                }
 
-            mapResultMutable.postValue(null)
+                mapResultMutable.postValue(null)
 
-            if (searchSession == null) {
-                searchSession = searchManager.newOnlineSession()
-            }
+                if (searchSession == null) {
+                    searchSession = SdkSearchSession(search.createSession())
+                }
 
-            searchJob = launch {
-                val searchCoordinates = positionManager.lastKnownPosition().coordinates
-                searchSession?.search(s.toString(), searchCoordinates).let {
-                    searchResultsMutable.postValue(it)
+                searchJob = launch {
+                    val searchCoordinates = positionManager.lastKnownPosition().coordinates
+                    searchSession?.search(s.toString(), searchCoordinates).let { results ->
+                        searchResultsMutable.postValue(results)
+                    }
                 }
             }
         }
@@ -112,6 +119,28 @@ class SdkMapFragmentViewModel : ViewModel() {
                 zoomLevel = 14F
                 position = geoCoordinates
             }
+        }
+    }
+
+    private suspend fun initSearch(): Search? {
+        with(searchManager) {
+            val parallelSearches = mutableListOf<Search>().apply {
+                createOfflineMapSearch()?.let { add(it) }
+                createOnlineMapSearch()?.let { add(it) }
+                createCustomPlacesSearch()?.let { add(it) }
+            }
+            val parallelCompositeSearch =
+                createCompositeSearch(SearchManager.CompositeSearchType.Parallel, parallelSearches)
+
+            val sequentialSearches = mutableListOf<Search>().apply {
+                createCoordinateSearch()?.let { add(it) }
+                parallelCompositeSearch?.let { add(it) }
+            }
+
+            return createCompositeSearch(
+                SearchManager.CompositeSearchType.Sequential,
+                sequentialSearches
+            )
         }
     }
 }

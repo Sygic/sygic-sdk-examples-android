@@ -5,18 +5,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sygic.sdk.example.R
-import com.sygic.sdk.example.ktx.SdkPositionManager
+import com.sygic.sdk.example.common.ktx.SdkPositionManager
 import com.sygic.sdk.map.Camera
 import com.sygic.sdk.map.MapAnimation
 import com.sygic.sdk.map.data.SimpleCameraDataModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private val CameraAnimation = MapAnimation(200, MapAnimation.InterpolationCurve.Linear)
 
-class SdkMapFragmentViewModel : ViewModel() {
-
-    val cameraDataModel = SimpleCameraDataModel()
-    private val positionManager = SdkPositionManager()
+@HiltViewModel
+class SdkMapFragmentViewModel @Inject constructor(
+    private val positionManager: SdkPositionManager,
+    val cameraDataModel: SimpleCameraDataModel
+) : ViewModel() {
 
     private val gpsStateDrawableMutable = MutableLiveData<Int>()
     val gpsStateDrawable: LiveData<Int> = gpsStateDrawableMutable

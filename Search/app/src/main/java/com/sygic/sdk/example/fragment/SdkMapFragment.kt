@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sygic.sdk.example.R
 import com.sygic.sdk.example.databinding.FragmentSdkMapBinding
-import com.sygic.sdk.example.utils.hideKb
+import com.sygic.sdk.example.common.extensions.hideKb
 import com.sygic.sdk.map.Camera
 import com.sygic.sdk.map.MapFragment
 import com.sygic.sdk.map.MapView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SdkMapFragment : MapFragment() {
     private lateinit var binding: FragmentSdkMapBinding
     private lateinit var bottomSheet: BottomSheetBehavior<View>
@@ -55,17 +57,17 @@ class SdkMapFragment : MapFragment() {
 
         binding.searchInput.addTextChangedListener(afterTextChanged = viewModel::onSearchTextChanged)
 
-        viewModel.searchResults.observe(viewLifecycleOwner, {
+        viewModel.searchResults.observe(viewLifecycleOwner) {
             (binding.searchResults.adapter as SearchResultsRecyclerAdapter).setData(it)
-        })
+        }
 
-        viewModel.mapResult.observe(viewLifecycleOwner, { mapResult ->
+        viewModel.mapResult.observe(viewLifecycleOwner) { mapResult ->
             bottomSheet.state = mapResult?.let {
                 binding.bottomSheet.title.text = mapResult.title
                 binding.bottomSheet.subtitle.text = mapResult.subtitle
                 BottomSheetBehavior.STATE_COLLAPSED
             } ?: BottomSheetBehavior.STATE_HIDDEN
-        })
+        }
 
         bottomSheet.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, state: Int) {

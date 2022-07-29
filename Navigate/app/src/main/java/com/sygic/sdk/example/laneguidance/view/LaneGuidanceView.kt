@@ -15,8 +15,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.Pools
 import com.sygic.sdk.example.R
 import com.sygic.sdk.example.laneguidance.data.LanesData
-import com.sygic.sdk.example.extensions.dpToPixels
-import com.sygic.sdk.example.extensions.getColorFromAttr
+import com.sygic.sdk.example.common.extensions.dpToPixels
+import com.sygic.sdk.example.common.extensions.getColorFromAttr
 
 private const val POOL_SIZE = 10
 

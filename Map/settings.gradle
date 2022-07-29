@@ -1,2 +1,4 @@
 rootProject.name = "Sygic Example"
-include ':app'
+include ':app', ':common'
+
+project(':common').projectDir = new File("../", "common")

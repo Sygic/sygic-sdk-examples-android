@@ -7,10 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sygic.sdk.example.R
-import com.sygic.sdk.example.fragment.data.MapClickResult
-import com.sygic.sdk.example.fragment.data.MapFragmentDataModel
+import com.sygic.sdk.example.common.data.MapClickResult
+import com.sygic.sdk.example.common.ktx.*
+import com.sygic.sdk.example.common.data.MapFragmentDataModel
+import com.sygic.sdk.example.common.extensions.subtitle
+import com.sygic.sdk.example.common.extensions.title
 import com.sygic.sdk.example.fragment.data.NavigationInfo
-import com.sygic.sdk.example.ktx.*
 import com.sygic.sdk.map.*
 import com.sygic.sdk.map.data.SimpleCameraDataModel
 import com.sygic.sdk.route.RouteRequest
