@@ -1,4 +1,0 @@
-rootProject.name = "Sygic Example"
-include ':app', ':common'
-
-project(':common').projectDir = new File("../", "common")

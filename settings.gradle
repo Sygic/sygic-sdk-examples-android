@@ -1,0 +1,2 @@
+rootProject.name = "Sygic Examples"
+include ':SygicStart', ':Search', ':Navigate', ':Map', ':Gps', ':CustomPlaces', ':common'

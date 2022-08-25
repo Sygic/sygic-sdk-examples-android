@@ -1,0 +1,118 @@
+{
+  "add_or_update": [
+    {
+      "id": "f53663a2-29e5-4681-8413-e3f985ed1937",
+      "iso": "gb",
+      "location": "51.50923606881001, -0.18384573273917826",
+      "category": "SYGeneral",
+      "search_priority": 15,
+      "display_name": [
+        {
+          "title": "Custom Place 1",
+          "subtitle": "Custom Place 1",
+          "lng": "en",
+          "search_tokens": [
+            {
+              "index": "CP Custom Place"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f53663a2-29e5-4681-8413-e3f985ed1938",
+      "iso": "gb",
+      "location": "51.50931293464358, -0.18372949605592792",
+      "category": "SYTennisCourt",
+      "search_priority": 15,
+      "display_name": [
+        {
+          "title": "Custom Place 2",
+          "subtitle": "Custom Place 2",
+          "lng": "en",
+          "search_tokens": [
+            {
+              "index": "CP Custom Place"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f53663a2-29e5-4681-8413-e3f985ed1939",
+      "iso": "gb",
+      "location": "51.509274501743015, -0.18352608186023994",
+      "category": "SYBusStation",
+      "search_priority": 15,
+      "display_name": [
+        {
+          "title": "Custom Place 3",
+          "subtitle": "Custom Place 3",
+          "lng": "en",
+          "search_tokens": [
+            {
+              "index": "CP Custom Place"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f53663a2-29e5-4681-8413-e3f985ed1940",
+      "iso": "gb",
+      "location": "51.50917276743793, -0.1835042874821305",
+      "category": "SYPetrolStation",
+      "search_priority": 15,
+      "display_name": [
+        {
+          "title": "Custom Place 4",
+          "subtitle": "Custom Place 4",
+          "lng": "en",
+          "search_tokens": [
+            {
+              "index": "CP Custom Place"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f53663a2-29e5-4681-8413-e3f985ed1941",
+      "iso": "gb",
+      "location": "51.50910494444167, -0.18360599457997454",
+      "category": "SYLibrary",
+      "search_priority": 15,
+      "display_name": [
+        {
+          "title": "Custom Place 5",
+          "subtitle": "Custom Place 5",
+          "lng": "en",
+          "search_tokens": [
+            {
+              "index": "CP Custom Place"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f53663a2-29e5-4681-8413-e3f985ed1942",
+      "iso": "gb",
+      "location": "51.509116248281394, -0.18380940877566254",
+      "category": "SYCastle",
+      "search_priority": 15,
+      "display_name": [
+        {
+          "title": "Custom Place 6",
+          "subtitle": "Custom Place 6",
+          "lng": "en",
+          "search_tokens": [
+            {
+              "index": "CP Custom Place"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Sygic Example</string>
+    <string name="offline_mode">Offline mode</string>
+</resources>
