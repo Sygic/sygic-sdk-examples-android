@@ -1,37 +1,44 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    ext {
-        sygic_sdk_version = '21.0.3'
-        plugin_version = "7.0.2"
-        build_tools_version = "31.0.0"
-        kotlin_version = "1.6.10"
-        hilt_version = "2.38.1"
-        compile_sdk_version = 31
-        target_sdk_version = 31
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileSdk compile_sdk_version
+
+    defaultConfig {
+        applicationId "com.sygic.sdk.example"
+        minSdk 21
+        targetSdk target_sdk_version
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    repositories {
-        google()
-        mavenCentral()
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
-    dependencies {
-        classpath "com.android.tools.build:gradle:$plugin_version"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
-allprojects {
-    repositories {
-        maven { url "https://public.repo.sygic.com/repository/maven-sygic-releases/" }
-        google()
-        mavenCentral()
-    }
-}
+dependencies {
+    implementation(project(":common"))
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    implementation "com.google.dagger:hilt-android:${hilt_version}"
+    kapt "com.google.dagger:hilt-compiler:${hilt_version}"
 }

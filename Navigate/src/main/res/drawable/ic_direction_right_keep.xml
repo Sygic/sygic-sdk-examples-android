@@ -1,0 +1,14 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="@dimen/directionSize"
+    android:height="@dimen/directionSize"
+    android:viewportWidth="136.0"
+    android:viewportHeight="136.0">
+
+    <path
+        android:fillColor="?attr/directionShade"
+        android:pathData="@string/right_keep_sec_path_data" />
+
+    <path
+        android:fillColor="?attr/directionColor"
+        android:pathData="@string/right_keep_path_data" />
+</vector>

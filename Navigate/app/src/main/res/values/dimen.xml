@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="directionSize">48dp</dimen>
-    <dimen name="simpleLaneSize">48dp</dimen>
-    <dimen name="squareButtonSize">68dp</dimen>
-</resources>
