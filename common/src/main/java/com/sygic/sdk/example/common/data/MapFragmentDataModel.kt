@@ -12,6 +12,7 @@ class MapFragmentDataModel : SimpleMapDataModel() {
 
     private var mapRoute: MapRoute? = null
     private var destinationMarker: MapMarker? = null
+    private var startMarker: MapMarker? = null
 
     fun clearData() {
         clearMapResultMarker()
@@ -32,10 +33,15 @@ class MapFragmentDataModel : SimpleMapDataModel() {
         mapResultMarker = null
     }
 
-    fun setMapRoute(route: Route) {
+    fun setMapRoute(route: Route, createStartMarker: Boolean = false) {
         clearMapRoute()
         mapRoute = MapRoute.from(route).setType(MapRoute.RouteType.Primary).build().apply {
             addMapObject(this)
+        }
+        if (createStartMarker) {
+            startMarker = MapMarker.at(route.start.navigablePosition).build().apply {
+                addMapObject(this)
+            }
         }
         destinationMarker = MapMarker.at(route.destination.navigablePosition).build().apply {
             addMapObject(this)
@@ -51,5 +57,9 @@ class MapFragmentDataModel : SimpleMapDataModel() {
             removeMapObject(it)
         }
         destinationMarker = null
+        startMarker?.let {
+            removeMapObject(it)
+        }
+        startMarker = null
     }
 }

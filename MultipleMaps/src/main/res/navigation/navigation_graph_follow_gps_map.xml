@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph_follow_gps_map"
+    app:startDestination="@id/sdkFollowGpsMapFragment">
+
+    <fragment
+        android:id="@+id/sdkFollowGpsMapFragment"
+        android:name="com.sygic.sdk.example.fragment.SdkFollowGpsMapFragment"
+        android:label="fragment_sdk_follow_gps_map"
+        tools:layout="@layout/fragment_sdk_follow_gps_map" />
+</navigation>
